@@ -23,6 +23,7 @@ parser.add_argument(
 )
 parser.add_argument("--aggregation", dest="AGGREGATION", type=str, default="D")
 parser.add_argument("--input", dest="INPUT", type=str, default="dataset.csv")
+parser.add_argument("--n-trials", dest="N_TRIALS", type=int, default=10)
 args = parser.parse_args()
 
 OUT_STEPS = args.OUT_STEPS
@@ -30,6 +31,7 @@ TRAIN_PERCENTAGE = args.TRAIN_PERCENTAGE
 VALIDATION_PERCENTAGE = args.VALIDATION_PERCENTAGE
 AGGREGATION = args.AGGREGATION
 INPUT_FILE = args.INPUT
+N_TRIALS = args.N_TRIALS
 
 
 df = utils.read_dataset(INPUT_FILE)
@@ -68,7 +70,7 @@ def objective(trial):
 
 # Run hyperparameter optmizer n times.
 study = optuna.create_study()
-study.optimize(objective, n_trials=10)
+study.optimize(objective, n_trials=N_TRIALS)
 best_params = study.best_params
 
 with mlflow.start_run():
