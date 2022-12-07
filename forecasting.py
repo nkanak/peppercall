@@ -1,6 +1,6 @@
 import tensorflow as tf
 from utils import WindowGenerator
-
+from typing import Literal
 
 class SingleShotForecaster:
     """A model to forecast pepper recalls.
@@ -35,11 +35,15 @@ class SingleShotForecaster:
             ]
         )
 
-    def compile(self) -> None:
-        """Configure the module."""
+    def compile(self, learning_rate: int) -> None:
+        """Configure the module.
+        
+        Args:
+            learing_rate (int): The optimization learning rate
+        """
         self.__model.compile(
             loss=tf.keras.losses.MeanSquaredError(),
-            optimizer=tf.keras.optimizers.Adam(),
+            optimizer=tf.keras.optimizers.Adam(learning_rate=learning_rate),
             metrics=[tf.keras.metrics.MeanAbsoluteError()],
         )
 
@@ -68,13 +72,16 @@ class SingleShotForecaster:
 
         return history
 
-    def predict(self):
+    def predict(self, window: WindowGenerator):
         pass
 
-    def evaluate(
-        self,
-    ):
-        pass
+    def evaluate(self, window: WindowGenerator, split: Literal['train', 'val', 'test']) -> list[float]:
+        if split == 'train':
+            return self.__model.evaluate(window.train)
+        elif split == 'val':
+            return self.__model.evaluate(window.val)
+
+        return self.__model.evaluate(window.test)
 
     @property
     def raw_model(self) -> tf.keras.Model:
