@@ -46,7 +46,6 @@ def objective(trial):
     lstm_units = trial.suggest_int("lstm_units", 10, 200)
     epochs = trial.suggest_int("epochs", 10, 20)
     learning_rate = trial.suggest_float("learning_rate", 0.001, 0.5)
-    # input_width = trial.suggest_int('input_width', 30, 365)
     input_width = trial.suggest_int("input_width", 3, 36)
     batch_size = trial.suggest_int("batch_size", 2, 20)
 
