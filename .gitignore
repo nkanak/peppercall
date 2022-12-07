@@ -1,3 +1,5 @@
 __pycache__/
 dataset.csv
 test_dataset.csv
+mlruns/
+outputs/
